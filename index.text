@@ -1,0 +1,56 @@
+/* eslint no-undef: 0 */
+/* eslint arrow-parens: 0 */
+import React from 'react';
+import { enquireScreen } from 'enquire-js';
+&scrollAnim&
+&import&
+&dataSource&
+import './less/antMotionStyle.less';
+
+let isMobile;
+enquireScreen((b) => {
+  isMobile = b;
+});
+
+const { location = {} } = typeof window !== 'undefined' ? window : {};
+
+export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isMobile,
+      show: !location.port,// If not dva 2.0 Please delete
+    };
+  }
+
+  componentDidMount() {
+    &scrollScreen-pragma&
+    // Adapts to the phone screen;
+    enquireScreen((b) => {
+      this.setState({ isMobile: !!b });
+    });
+    // dva 2.0 Styles are loaded dynamically after the component is rendered, causing the scrolling component to not take effect; Online does not affect;
+    /* If not dva 2.0 Please delete start */
+    if (location.port) {
+      // style build Time is in 200-300ms between;
+      setTimeout(() => {
+        this.setState({
+          show: true,
+        });
+        &scrollScreen&
+      }, 500);
+    }
+    /* If not dva 2.0 Please delete end */
+  }
+
+  render() {
+    &children&
+    return (
+      <div className="templates-wrapper" ref={(d) => { this.dom = d; }}>
+        {/* If not dva 2.0 Replace with {children} start */}
+        {this.state.show && children}
+        {/* If not dva 2.0 Replace with {children} end */}
+      </div>
+    );
+  }
+}
